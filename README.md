@@ -1,5 +1,12 @@
 # Smile-Squad
 
+## Team members:
+- Ayoub Kandah
+- Baha Zghayar
+- Raghad Mustafa
+- Omar Tarawnih
+- Faten Samman
+
 ## Planning
 
 - We are going to meet everyday at 9:00 pm at Remo
