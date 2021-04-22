@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const users = new mongoose.Schema({
-    username: { type: String, required: true },
+    username: { type: String, required: true , unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     imgurl: { type: String },
@@ -14,7 +14,7 @@ const users = new mongoose.Schema({
     gamePlayed: { type: Number },
     gameWin: { type: Number },
     winRatio: { type: Number },
-    // friendList:[],
+    friendList:[],
     // reportsNumbers:{ type:int},
     // reports:[],
 
@@ -73,7 +73,5 @@ users.statics.authenticateWithToken = async function (token) {
 }
 
 
-module.exports = {
-    Model: mongoose.model('users', users),
-    schema: users
-}
+module.exports = mongoose.model('users', users);
+
