@@ -51,6 +51,7 @@
   - If the PR get approved we will merge it.
 
 ## Wireframe
+![smile](./image/smilesquad.jpg)
 
 ### User Stories
 1.	Title: Playing 1 vs 1 
