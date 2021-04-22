@@ -52,6 +52,7 @@
   - If the PR get approved we will merge it.
 
 ## Wireframe
+![smile](./image/smilesquad.jpg)
 
 ### User Stories
 
