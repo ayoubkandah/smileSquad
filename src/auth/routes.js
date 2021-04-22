@@ -3,14 +3,14 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('./models/users.js');
+const Model = require('./models/users.js');
 const basicAuth = require('./middleware/basic.js')
 const bearerAuth = require('./middleware/bearer.js')
 const permissions = require('./middleware/acl.js')
 
 router.post('/signup', async (req, res, next) => {
   try {
-    let user = new User(req.body);
+    let user = new Model(req.body);
     const userRecord = await user.save();
     const output = {
       user: userRecord,
@@ -36,7 +36,7 @@ router.post('/signin', basicAuth, (req, res, next) => {
 
 router.get('/users', bearerAuth, permissions('delete'), async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await Model.find({});
     const list = users.map(user => user.username);
     res.status(200).json(list);
   } catch (e) {
@@ -53,8 +53,10 @@ router.get('/profile', bearerAuth, async (req, res, next) => {
 });
 
 router.get('/adminProfile', bearerAuth,permissions('delete'), async (req, res, next) => {
+  console.log(req.user.username)
+ 
   try{
-    res.status(200).send(`Welcome to Smile Squad game${req.body.username}`)
+    res.status(200).send(`Welcome to Smile Squad game ${req.user.username}`)
   }catch (e) {
     next(e.message);
   }

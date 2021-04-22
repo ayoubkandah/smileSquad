@@ -10,7 +10,7 @@ const users = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     imgurl: { type: String },
-    active: { type: Boolean, required: true,default: true },
+    active: { type: Boolean, required: true, default: true },
     gamePlayed: { type: Number },
     gameWin: { type: Number },
     winRatio: { type: Number },
@@ -20,6 +20,15 @@ const users = new mongoose.Schema({
 
     role: { type: String, required: true, default: 'user', enum: ['user', 'admin'] },
 });
+
+// const player = mongoose.Schema({
+//     player:{
+//         type:mongoose.Schema.Types.ObjectId,
+//         ref:'users'
+//     },
+//  });
+//  const Player = mongoose.model('player', player);
+
 
 users.virtual('token').get(function () {
     let tokenObject = {
@@ -55,7 +64,7 @@ users.statics.authenticateWithToken = async function (token) {
     try {
         const parsedToken = jwt.verify(token, process.env.KEY);
         const user = this.findOne({ username: parsedToken.username })
-        console.log(user._conditions.username)
+        
         if (user) { return user; }
         throw new Error("User Not Found");
     } catch (e) {
@@ -64,4 +73,7 @@ users.statics.authenticateWithToken = async function (token) {
 }
 
 
-module.exports = mongoose.model('users', users);
+module.exports = {
+    Model: mongoose.model('users', users),
+    schema: users
+}
