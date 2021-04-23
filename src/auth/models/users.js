@@ -6,17 +6,17 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const users = new mongoose.Schema({
-    username: { type: String, required: true , unique: true },
+    username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     imgurl: { type: String },
     active: { type: Boolean, required: true, default: true },
-    gamePlayed: { type: Number },
-    gameWin: { type: Number },
-    winRatio: { type: Number },
-    friendList:[],
-    // reportsNumbers:{ type:int},
-    // reports:[],
+    gamePlayed: { type: Number , default: 0},
+    gameWin: { type: Number, default: 0 },
+    winRatio: { type: Number , default: 0},
+    friendList: [],
+    reportsNumbers: { type: Number, default: 0 },
+    reports: [],
 
     role: { type: String, required: true, default: 'user', enum: ['user', 'admin'] },
 });
@@ -64,7 +64,7 @@ users.statics.authenticateWithToken = async function (token) {
     try {
         const parsedToken = jwt.verify(token, process.env.KEY);
         const user = this.findOne({ username: parsedToken.username })
-        
+
         if (user) { return user; }
         throw new Error("User Not Found");
     } catch (e) {
