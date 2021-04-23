@@ -39,7 +39,28 @@ router.post('/signin', basicAuth, (req, res, next) => {
 
 //////////////////////////////////////// admin  routes ////////////////////////////////////////////
 
-router.get('/api/v1/players', bearerAuth, permissions('delete'), async (req, res, next) => {
+router.get('/api/v1/players', bearerAuth, permissions('delete'), getAllPlayersHandler);
+router.get('/api/v1/players/:id', bearerAuth, permissions('delete'), getOnePlayerHandler);
+router.put('/api/v1/players/:id', bearerAuth, permissions('update'), updatePlayerHandler);
+router.delete('/api/v1/players/:id', bearerAuth, permissions('delete'), deletePlayerHandler);
+router.post('/api/v1/players/', bearerAuth, permissions('delete'), createPlayerHandler);
+router.get('/adminProfile', bearerAuth, permissions('delete'), adminProfile);
+router.get('/api/v1/report/players/', bearerAuth, permissions('delete'), getReportsHandler);
+
+//////////////////////////////////////// user routes ////////////////////////////////////////////
+
+router.post('/api/v1/players/:id/addFriend', bearerAuth, addFriendHandler);
+router.post('/api/v1/players/:id/removeFriend', bearerAuth, removeFriendHandler);
+router.get('/api/v1/players/:id/friends', bearerAuth, getFriendsHandler);
+router.get('/profile', bearerAuth, playerProfile);
+router.get('/api/v1/search/:username', bearerAuth, searchByHandler);
+router.post('/api/v1/report/player/:username', bearerAuth, addReportHandler);
+
+router.post('/api/v1/players/game', winLoseHandler);
+router.get('/api/v1/topPlayers', getTopPlayersHandlers);
+///////////////////////////////////// admin  routes functions //////////////////////////////////////
+
+async function getAllPlayersHandler(req, res, next) {
   try {
     const users = await Model.find({});
     const list = users.filter(user => {
@@ -50,9 +71,9 @@ router.get('/api/v1/players', bearerAuth, permissions('delete'), async (req, res
   } catch (e) {
     next(e.message);
   }
-});
+}
 
-router.get('/api/v1/players/:id', bearerAuth, permissions('delete'), async (req, res, next) => {
+async function getOnePlayerHandler(req, res, next) {
   try {
     const id = req.params.id;
     const users = await Model.find({});
@@ -64,10 +85,9 @@ router.get('/api/v1/players/:id', bearerAuth, permissions('delete'), async (req,
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-
-router.put('/api/v1/players/:id', bearerAuth, permissions('update'), async (req, res, next) => {
+async function updatePlayerHandler(req, res, next) {
   try {
     const record = req.body;
     const id = req.params.id;
@@ -76,9 +96,9 @@ router.put('/api/v1/players/:id', bearerAuth, permissions('update'), async (req,
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.delete('/api/v1/players/:id', bearerAuth, permissions('delete'), async (req, res, next) => {
+async function deletePlayerHandler(req, res, next) {
   try {
     const id = req.params.id;
     const users = await Model.findByIdAndDelete(id);
@@ -86,9 +106,9 @@ router.delete('/api/v1/players/:id', bearerAuth, permissions('delete'), async (r
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.post('/api/v1/players/', bearerAuth, permissions('delete'), async (req, res, next) => {
+async function createPlayerHandler(req, res, next) {
   try {
     const object = req.body;
     const users = await new Model(object).save();
@@ -96,18 +116,17 @@ router.post('/api/v1/players/', bearerAuth, permissions('delete'), async (req, r
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.get('/adminProfile', bearerAuth, permissions('delete'), async (req, res, next) => {
-  // console.log(req.user.username)
-
+async function adminProfile(req, res, next) {
   try {
     res.status(200).send(`Welcome to Smile Squad game ${req.user.username}`)
   } catch (e) {
     next(e.message);
   }
-});
-router.get('/api/v1/report/players/', bearerAuth, permissions('delete'), async (req, res, next) => {
+};
+
+async function getReportsHandler(req, res, next) {
   try {
     const users = await Model.find({});
 
@@ -123,10 +142,17 @@ router.get('/api/v1/report/players/', bearerAuth, permissions('delete'), async (
   } catch (e) {
     next(e.message);
   }
-});
-//////////////////////////////////////// user routes ////////////////////////////////////////////
+};
 
-router.post('/api/v1/players/:id/addFriends', bearerAuth, async (req, res, next) => {
+
+//////////////////////////////////////// user routes functions////////////////////////////////////////////
+
+
+//for add and remove friends use in body :
+//      {
+//         "name":"friend name"
+//       }
+async function addFriendHandler(req, res, next) {
   try {
     const id = req.params.id;
     const users = await Model.find({});
@@ -136,24 +162,20 @@ router.post('/api/v1/players/:id/addFriends', bearerAuth, async (req, res, next)
         return true;
       }
     });
-
     let friendId = list[0]._id;
-
     if (req.user.friendList.includes(friendId)) {
       res.status(200).json(req.user);
     } else {
       req.user.friendList.push(friendId)
       req.user.save();
-      // console.log(req.user);
-
       res.status(200).json(req.user);
     }
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.post('/api/v1/players/:id/removeFriend', bearerAuth, async (req, res, next) => {
+async function removeFriendHandler(req, res, next) {
   try {
     const id = req.params.id;
     const users = await Model.find({});
@@ -163,44 +185,35 @@ router.post('/api/v1/players/:id/removeFriend', bearerAuth, async (req, res, nex
         return true;
       }
     });
-
     let friendId = list[0]._id;
     if (req.user.friendList.length == 0) {
       res.status(200).json(req.user);
     } else {
-
       let idx = 0;
       req.user.friendList.forEach((element, index) => {
-        // console.log('__idx' , index , element.toString() , friendId.toString() );
         if (element.toString() === friendId.toString()) {
           idx = index;
           req.user.friendList.splice(idx, 1);
-          // console.log('__idx' , idx , element );
         }
       });
-
       req.user.save();
     }
-
     res.status(200).json(req.user);
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.get('/api/v1/players/:id/friends', bearerAuth, async (req, res, next) => {
+async function getFriendsHandler(req, res, next) {
   try {
     const id = req.params.id;
     const users = await Model.find({});
-    // console.log(req.user.friendList);
-
     let friends = req.user.friendList.map(element => {
       let s = users.filter(user => {
         if (user._id.toString() == element.toString()) {
           return true;
         }
       })
-      // console.log(s[0].username);
       return s[0].username;
     });
     res.status(200).json(friends);
@@ -208,17 +221,17 @@ router.get('/api/v1/players/:id/friends', bearerAuth, async (req, res, next) => 
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.get('/profile', bearerAuth, async (req, res, next) => {
+async function playerProfile(req, res, next) {
   try {
     res.status(200).send(`Welcome to Smile Squad game ${req.user.username}`)
   } catch (e) {
     next(e.message);
   }
-});
+};
 
-router.get('/api/v1/search/:username', bearerAuth, async (req, res, next) => {
+async function searchByHandler(req, res, next) {
   try {
     const key = req.params.username;
     const users = await Model.find({});
@@ -233,17 +246,25 @@ router.get('/api/v1/search/:username', bearerAuth, async (req, res, next) => {
   } catch (e) {
     next(e.message);
   }
-});
-router.post('/api/v1/report/player/:id', bearerAuth, async (req, res, next) => {
+};
+
+async function addReportHandler(req, res, next) {
   try {
-    const id = req.params.id;
+    // the username here is for the person who will receive the report 
+    // http://localhost:3000/api/v1/report/player/<username>
+    // for add report msg use in body:
+  //   {
+  //     "message":"this player ..................."
+  // }
+    const username = req.params.username;
     const users = await Model.find({});
     const object = req.body.message;
     const list = users.filter(user => {
-      if (user._id == id) {
+      if (user.username == username) {
         return true;
       }
     });
+    console.log(list)
     list[0].reports.push({ name: req.user.username, msg: object })
     list[0].reportsNumbers++;
     list[0].save();
@@ -251,7 +272,7 @@ router.post('/api/v1/report/player/:id', bearerAuth, async (req, res, next) => {
   } catch (e) {
     next(e.message);
   }
-});
+};
 
 // in body :
 // {
@@ -260,8 +281,7 @@ router.post('/api/v1/report/player/:id', bearerAuth, async (req, res, next) => {
 //   ],
 //    "winner":"omar"
 // }
-
-router.post('/api/v1/players/game', async (req, res) => {
+async function winLoseHandler(req, res) {
   try {
     let gamePlayers = req.body.gamePlayers;
     let winner = req.body.winner;
@@ -273,51 +293,44 @@ router.post('/api/v1/players/game', async (req, res) => {
         if (user == element.username) {
           element.gamePlayed++;
           playerArr.push(element)
-          // element.save();
           return true
         }
       })
     })
-   let winPlayer = users.filter(element=>{
-    if(winner == element.username){
-      element.gameWin++;
-      // element.save();
+    let winPlayer = users.filter(element => {
+      if (winner == element.username) {
+        element.gameWin++;
       }
-   })
-
-   let ratio = users.map(element=>{
-     if(element.gamePlayed==0){
-       return;
-     }else{
-       element.winRatio=((element.gameWin/element.gamePlayed)*100/100).toFixed(2);
-       element.save();
-     }
-   })
+    })
+    let ratio = users.map(element => {
+      if (element.gamePlayed == 0) {
+        return;
+      } else {
+        element.winRatio = ((element.gameWin / element.gamePlayed) * 100 / 100).toFixed(2);
+        element.save();
+      }
+    })
     res.status(200).json(playerArr);
 
   } catch (e) {
     throw Error(e.message)
   }
-});
+};
 
-router.get('/api/v1/topPlayers', async (req, res) => {
+async function getTopPlayersHandlers(req, res) {
   try {
-    
     const users = await Model.find({});
-
-    users.sort((a,b) => {
-      if (a.winRatio < b.winRatio){
+    users.sort((a, b) => {
+      if (a.winRatio < b.winRatio) {
         return 1;
       }
-       else if (a.winRatio > b.winRatio) return -1;
-       else return 0;
-   });
-   
-         res.status(200).json(users.slice(0,5));
-
-  }catch (e) {
+      else if (a.winRatio > b.winRatio) return -1;
+      else return 0;
+    });
+    res.status(200).json(users.slice(0, 5));
+  } catch (e) {
     throw Error(e.message)
   }
-});
+};
 
 module.exports = router;
