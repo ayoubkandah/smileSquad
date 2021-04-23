@@ -252,6 +252,15 @@ router.post('/api/v1/report/player/:id', bearerAuth, async (req, res, next) => {
     next(e.message);
   }
 });
+
+// in body :
+// {
+//   "gamePlayers":[
+//       "faten","raghad","lolo","majd","omar"
+//   ],
+//    "winner":"omar"
+// }
+
 router.post('/api/v1/players/game', async (req, res) => {
   try {
     let gamePlayers = req.body.gamePlayers;
@@ -290,4 +299,25 @@ router.post('/api/v1/players/game', async (req, res) => {
     throw Error(e.message)
   }
 });
+
+router.get('/api/v1/topPlayers', async (req, res) => {
+  try {
+    
+    const users = await Model.find({});
+
+    users.sort((a,b) => {
+      if (a.winRatio < b.winRatio){
+        return 1;
+      }
+       else if (a.winRatio > b.winRatio) return -1;
+       else return 0;
+   });
+   
+         res.status(200).json(users.slice(0,5));
+
+  }catch (e) {
+    throw Error(e.message)
+  }
+});
+
 module.exports = router;
