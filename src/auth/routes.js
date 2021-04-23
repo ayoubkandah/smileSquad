@@ -264,7 +264,7 @@ router.post('/api/v1/players/game', async (req, res) => {
         if (user == element.username) {
           element.gamePlayed++;
           playerArr.push(element)
-          element.save();
+          // element.save();
           return true
         }
       })
@@ -272,7 +272,7 @@ router.post('/api/v1/players/game', async (req, res) => {
    let winPlayer = users.filter(element=>{
     if(winner == element.username){
       element.gameWin++;
-      element.save();
+      // element.save();
       }
    })
 
