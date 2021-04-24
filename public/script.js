@@ -1,6 +1,6 @@
 'use strict';
 
-const socket = io('https://videochat-ak.herokuapp.com/');
+const socket = io('https://smile-squad.herokuapp.com/');
 // const options = {
 //   transports: ['websocket'],
 // };

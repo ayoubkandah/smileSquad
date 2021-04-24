@@ -26,7 +26,22 @@ router.post('/login-google', (req, res) => {
     const userid = payload['sub'];
     // If request specified a G Suite domain:
     // const domain = payload['hd'];
-    console.log('__payload__', payload);
+    let newUser = new GoogleUser(
+      payload.name,
+      payload.email,
+      'Oauth-google',
+      payload.picture
+    );
+    let exist = await User.findOne({
+      email: 'youtarawneh997@gmail.com',
+    }).exec();
+    if (!exist) {
+      let user = new User(newUser);
+      let record = await user.save();
+      return record;
+    } else {
+      return exist;
+    }
   }
   verify()
     .then(() => {
@@ -35,5 +50,12 @@ router.post('/login-google', (req, res) => {
     })
     .catch(console.error);
 });
+
+function GoogleUser(name, email, password, imgUrl) {
+  this.username = name;
+  this.email = email;
+  this.password = password;
+  this.imgUrl = imgUrl;
+}
 
 module.exports = router;
