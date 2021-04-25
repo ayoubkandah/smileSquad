@@ -24,9 +24,10 @@ let client = 0;
 let rooms = [];
 let index = 0;
 let room = 0;
+
 let userID;
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');  
 app.use(express.static('public'));
 app.use(cors());
 app.use(morgan('dev'));
@@ -96,6 +97,7 @@ io.on('connection', (socket) => {
   socket.on('winner', (roomG) => {
     socket.to(roomG).emit('youWin');
   });
+
 });
 
 // Errors Middlewares
