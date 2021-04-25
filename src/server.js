@@ -15,6 +15,18 @@ const googleRouter = require('./auth/middleware/google.js');
 // const facebookRouter = require('./auth/middleware/facebook.js');
 const videoRouter = require('./routes/videoGame.js');
 
+// CHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT
+const formatMessage = require('../utils/messages.js');
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers
+} = require('../utils/users.js');
+
+const botName = 'ChatCord Bot';
+// *******************************************************
+
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -28,6 +40,7 @@ let userID;
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+
 app.use(cors());
 app.use(morgan('dev'));
 
@@ -46,6 +59,10 @@ app.use(googleRouter);
 app.get('/', (req, res) => {
   res.render('index');
 });
+
+app.get('/chat' , (req, res)=>{
+  res.render('chat')
+})
 
 // socket io
 
@@ -75,6 +92,22 @@ io.on('connection', (socket) => {
         rooms.pop();
       }
       socket.to(room).emit('user-disconnected', userId);
+
+      // CHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT
+      const user = userLeave(socket.id);
+      if (user) {
+        io.to(user.room).emit(
+          'message',
+          formatMessage(botName, `${user.username} has left the chat`)
+        );
+
+        // Send users and room info
+        io.to(user.room).emit('roomUsers', {
+          room: user.room,
+          users: getRoomUsers(user.room)
+        });
+      }
+      // ********************************************************
     });
   });
 
@@ -96,6 +129,41 @@ io.on('connection', (socket) => {
   socket.on('winner', (roomG) => {
     socket.to(roomG).emit('youWin');
   });
+
+  // CHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT
+  // Run when client connects
+    socket.on('joinRoom', ({ username, room }) => {
+      const user = userJoin(socket.id, username, room);
+
+      socket.join(user.room);
+
+      // Welcome current user
+      socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'));
+
+      // Broadcast when a user connects
+      socket.broadcast
+        .to(user.room)
+        .emit(
+          'message',
+          formatMessage(botName, `${user.username} has joined the chat`)
+        );
+
+      // Send users and room info
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      });
+    });
+
+    // Listen for chatMessage
+    socket.on('chatMessage', msg => {
+      const user = getCurrentUser(socket.id);
+
+      io.to(user.room).emit('message', formatMessage(user.username, msg));
+    });
+    // *************************************************************************
+
+  
 });
 
 // Errors Middlewares
@@ -108,3 +176,11 @@ module.exports = {
     server.listen(port, () => console.log(`Listening on ${port}`));
   },
 };
+
+
+
+
+
+
+
+
