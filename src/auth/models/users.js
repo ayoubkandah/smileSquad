@@ -5,6 +5,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// const post = new mongoose.Schema({
+//   title:{ type: String, required: true, unique: true },
+//   content:{ type: String, required: true, unique: true }
+// })
+//  mongoose.model('Post', post)
+
 const users = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -17,7 +23,9 @@ const users = new mongoose.Schema({
   friendList: [],
   reportsNumbers: { type: Number, default: 0 },
   reports: [],
-
+  posts:[],
+    // type:mongoose.Schema.Types.ObjectId,
+    // ref : 'Feed'
   role: {
     type: String,
     required: true,
