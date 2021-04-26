@@ -248,9 +248,9 @@ async function addReportHandler(req, res, next) {
 // in body :
 // {
 //   "gamePlayers":[
-//       "faten","raghad","lolo","majd","omar"
+//       "faten","raghad"
 //   ],
-//    "winner":"omar"
+//    "winner":"faten"
 // }
 async function winLoseHandler(req, res) {
   try {
