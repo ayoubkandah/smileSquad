@@ -9,8 +9,9 @@ router.get('/playerDisc/:id', (req, res) => {
 });
 
 router.get('/pvp/', (req, res) => {
-  res.render('pvp.ejs', { roomId: 'req.params.room' });
+  res.render('pvp.ejs', { Private:false,Room:undefined,roomId: 'req.params.room' });
 });
+
 router.get('/loser/:id', (req, res) => {
   //--make update and increase value for player id params
   res.render('loser.ejs');
