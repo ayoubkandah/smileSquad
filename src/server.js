@@ -14,7 +14,7 @@ const router = require('./admin/router/router.js'); // admin panel router
 const googleRouter = require('./auth/middleware/google.js');
 // const facebookRouter = require('./auth/middleware/facebook.js');
 const videoRouter = require('./routes/videoGame.js');
-
+const{v4:uuidv4}=require("uuid")
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -24,9 +24,9 @@ let client = 0;
 let rooms = [];
 let index = 0;
 let room = 0;
-
+let privateU=0;
 let userID;
-
+let roomsP=[]
 app.set('view engine', 'ejs');  
 app.use(express.static('public'));
 app.use(cors());
@@ -48,26 +48,69 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/pvp/:id', (req, res) => {
+  
+// res.send(room)
+
+  res.render('pvp.ejs',{private:true,Room:req.params.id,roomId:"null"});
+
+});
 // socket io
 
 io.on('connection', (socket) => {
-  socket.on('join-room', (roomId, userId) => {
-    client++;
-    if (client % 2 !== 0) {
-      index = client - index - 1;
-      rooms.push(index);
-      room = rooms[index];
-      socket.Room = room;
-      socket.join(room);
-      console.log(room, 'player');
-    } else if (client % 2 == 0) {
-      socket.Room = room;
-      socket.join(room);
-      index++;
+  socket.on('join-room', (roomId, userId,RoomPrivate) => {
+    
+  
+   console.log(uuidv4())     
+    
+    if (RoomPrivate) {
+      if (roomsP.includes(RoomPrivate)==false) {
+       console.log("push not include")
+        roomsP.push(RoomPrivate)
+        room = RoomPrivate;
+        console.log(room)
+        socket.join(room);
+      }else {
+
+        console.log("include Private")
+        room=RoomPrivate
+        console.log("in before conn")
+        socket.Room = room;
+        console.log(room)
+        socket.join(room);
       socket.to(room).emit('user-connected', userId, room);
-    } else {
     }
+    }else{
+      client++;
+      if (client % 2 !== 0) {
+          console.log("not Private")
+          index = client - index - 1;
+          rooms.push(index);
+          room = rooms[index];
+       
+      socket.Room = room;
+      console.log(room, 'player');
+      socket.join(room);
+        } else if (client % 2 == 0) {
+          
+          room = rooms[index];
+          socket.join(room);
+          console.log(rooms)
+          index++;
+          socket.to(room).emit('user-connected', userId, room);
+          
+        }
+      }
+    
+    
     socket.on('disconnect', () => {
+      if(roomsP.includes(socket.Room)){
+let indexArr=roomsP.indexOf(socket.Room)
+console.log(indexArr)
+roomsP[indexArr]=null
+        socket.to(room).emit('user-disconnected', userId);
+
+      }else{
       if (client > 0) {
         client--;
       }
@@ -76,6 +119,7 @@ io.on('connection', (socket) => {
         rooms.pop();
       }
       socket.to(room).emit('user-disconnected', userId);
+    }
     });
   });
 
@@ -83,6 +127,7 @@ io.on('connection', (socket) => {
     socket.emit('user-connected2', userId);
   });
   socket.on('startG', (roomG) => {
+    console.log("startG",roomG);
     socket.nsp.to(roomG).emit('startGaming', roomG);
   });
 

@@ -4,11 +4,12 @@
 const options = {
   transports: ['websocket'],
 };
+ 
 const socket = io('localhost:3000/', options); // emmit connection event to server
 let video2 = document.getElementById('video2');
 let video1 = document.getElementById('video1');
 const videoGrid = document.getElementById('video-grid');
-
+// console.log(Privadte);
 const myPeer = new Peer();
 const myVideo = document.getElementById('video1');
 myVideo.muted = true;
@@ -82,12 +83,14 @@ navigator.mediaDevices
 
     socket.on('user-connected', (userId, room) => {
       player = 2;
+      console.log(room)
+      roomP = room;
       console.log(video2.srcObject);
       // console.log(video1.srcObject)
 
       connectToNewUser(userId, stream);
-
-      roomP = room;
+        
+     
       console.log('---');
       setTimeout(function aa() {
         console.log('done 6sec');
@@ -216,14 +219,16 @@ navigator.mediaDevices
     socket.on('user-disconnected', (userId) => {
       if (peers[userId]) peers[userId].close();
       if (!complete) {
-        window.location.href = './playerDisc/id';
+        window.location.href = 'http://localhost:3000/playerDisc/id';
       }
     });
   });
 
 myPeer.on('open', (id) => {
   userID = id;
-  socket.emit('join-room', ROOM_ID, id);
+  console.log(RoomPrivate)
+
+  socket.emit('join-room', ROOM_ID, id,RoomPrivate);
 });
 
 function connectToNewUser(userId, stream) {
