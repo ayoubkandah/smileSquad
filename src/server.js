@@ -64,6 +64,10 @@ app.get('/chat' , (req, res)=>{
   res.render('chat')
 })
 
+app.get('/bad', (req, res) => {
+  throw new Error('something went wrong');
+});
+
 // socket io
 
 io.on('connection', (socket) => {
