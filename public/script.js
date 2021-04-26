@@ -1,14 +1,15 @@
 'use strict';
 
-const socket = io('https://smile-squad.herokuapp.com/');
-// const options = {
-//   transports: ['websocket'],
-// };
-// const socket = io('localhost:3000/', options); // emmit connection event to server
+// const socket = io('https://smile-squad.herokuapp.com/');
+const options = {
+  transports: ['websocket'],
+};
+ 
+const socket = io('localhost:3000/', options); // emmit connection event to server
 let video2 = document.getElementById('video2');
 let video1 = document.getElementById('video1');
 const videoGrid = document.getElementById('video-grid');
-
+// console.log(Privadte);
 const myPeer = new Peer();
 const myVideo = document.getElementById('video1');
 myVideo.muted = true;
@@ -82,12 +83,14 @@ navigator.mediaDevices
 
     socket.on('user-connected', (userId, room) => {
       player = 2;
+      console.log(room)
+      roomP = room;
       console.log(video2.srcObject);
       // console.log(video1.srcObject)
 
       connectToNewUser(userId, stream);
-
-      roomP = room;
+        
+     
       console.log('---');
       setTimeout(function aa() {
         console.log('done 6sec');
@@ -129,15 +132,22 @@ navigator.mediaDevices
     socket.on('startGaming', (roomG) => {
       console.log(player);
       if (conBoolen) {
+
         roomP = roomG;
         $('#p2').text('Player 2');
         $('#start').show();
         if (player == 1) {
+      $('#video1').addClass("Active")
+      $('#video2').addClass("unActive")
           trigger = false;
           GameStart();
         } else if (player == 2) {
           trigger = true;
           $('#video2').prop('muted', false);
+
+          // $('#video1').removeClass("unActive")
+          $('#video2').addClass("Active")
+          $('#video1').addClass("unActive")
 
           $('#turn').text('Opponent turn');
           $('#hint').text('Dont laughing');
@@ -151,6 +161,10 @@ navigator.mediaDevices
       $('#yourP').text(`your Points : ${yourPoints}`);
       $('#oppP').text(`opponent Points : ${oppPoints}`);
       $('#video2').prop('muted', true);
+      $('#video1').removeClass()
+      $('#video2').removeClass()
+      $('#video1').addClass("Active")
+      $('#video2').addClass("unActive")
       GameStart();
     });
     socket.on('getPoint', (yourPointss, oppPointss) => {
@@ -188,6 +202,10 @@ navigator.mediaDevices
           $('#turn').text('Opponent turn');
           $('#video2').prop('muted', false);
           $('#hint').text('Dont laughing');
+          $('#video2').removeClass()
+          $('#video1').removeClass()
+          $('#video2').addClass("Active")
+          $('#video1').addClass("unActive")
           trigger = true;
           socket.emit('p2Turn', roomP, oppPoints, yourPoints);
 
@@ -201,14 +219,16 @@ navigator.mediaDevices
     socket.on('user-disconnected', (userId) => {
       if (peers[userId]) peers[userId].close();
       if (!complete) {
-        window.location.href = './playerDisc/id';
+        window.location.href = 'http://localhost:3000/playerDisc/id';
       }
     });
   });
 
 myPeer.on('open', (id) => {
   userID = id;
-  socket.emit('join-room', ROOM_ID, id);
+  console.log(RoomPrivate)
+
+  socket.emit('join-room', ROOM_ID, id,RoomPrivate);
 });
 
 function connectToNewUser(userId, stream) {
