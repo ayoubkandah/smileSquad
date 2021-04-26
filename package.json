@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage --verbose --watch"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.1",
     "google-auth-library": "^7.0.4",
+    "jest": "^26.6.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.5",
     "morgan": "^1.10.0",
@@ -40,6 +41,7 @@
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1",
     "superagent": "^6.1.0",
     "tslib": "^2.2.0",
     "uuid": "^8.3.2"

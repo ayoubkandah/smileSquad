@@ -56,8 +56,9 @@ app.get('/pvp/:id', (req, res) => {
 
 });
 // socket io
-
+let socketTest;
 io.on('connection', (socket) => {
+  socketTest=socket
   socket.on('join-room', (roomId, userId,RoomPrivate) => {
     
   
@@ -154,4 +155,7 @@ module.exports = {
   start: (port) => {
     server.listen(port, () => console.log(`Listening on ${port}`));
   },
+  io:io,
+  socket:socketTest,
 };
+

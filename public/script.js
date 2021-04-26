@@ -100,7 +100,7 @@ navigator.mediaDevices
         } else {
           socket.emit('startG', roomP);
         }
-      }, 2000);
+      }, 4000);
       if (video2.srcObject !== null) {
         socket.emit('startG', roomP);
       }
