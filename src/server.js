@@ -107,4 +107,5 @@ module.exports = {
   start: (port) => {
     server.listen(port, () => console.log(`Listening on ${port}`));
   },
+  io: io,
 };
