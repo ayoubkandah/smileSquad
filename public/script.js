@@ -187,7 +187,7 @@ navigator.mediaDevices
       trigger = false;
       timeleft = 13;
       console.log('gamestart');
-      $('#hint').text('make you opponent laughing');
+      $('#hint').text('make your opponent laughing');
 
       $('#turn').text('your turn');
 
@@ -196,9 +196,9 @@ navigator.mediaDevices
         if (timeleft <= 0) {
           timeleft = 0;
           clearInterval(downloadTimer);
-          $('#turn').text('Opponent turn');
+          // $('#turn').text('Opponent turn');
           $('#video2').prop('muted', false);
-          $('#hint').text('Dont laughing');
+          // $('#hint').text('TRY NOT TO LAUGH');
           $('#video2').removeClass()
           $('#video1').removeClass()
           $('#video2').addClass("Active")
