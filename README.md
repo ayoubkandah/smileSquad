@@ -368,7 +368,7 @@ posts:[
 ```
 https://www.youtube.com/watch?v=zAe5n2F3IQI
 ```
-### GRAGHQL API
+### GRAPHQL API
 ![GRPGH](https://miro.medium.com/max/700/1*K0czTfHWTtNNBhvaVdyXfw.gif)
 ![GRPGH](https://graphql-engine-cdn.hasura.io/learn-hasura/assets/graphql-react/graphql-api.gif)
 
