@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const authRoutes = require('./auth/routes');
 const gameRoutes = require('./routes/gameRoutes.js');
+const postsRoutes = require('./routes/postsRouts.js');
 const notFoundHandler = require('./error-handlers/404');
 const errorHandler = require('./error-handlers/500');
 const adminBro = require('./admin/adminbro/adminBro.js');
@@ -41,6 +42,8 @@ app.use(cookieParser());
 app.use('/api/v1', authRoutes);
 app.use('/api/v1', gameRoutes);
 app.use('/api/v1', videoRouter);
+app.use(postsRoutes);
+app.use(videoRouter);
 app.use(googleRouter);
 // app.use(facebookRouter);
 // testing Routes

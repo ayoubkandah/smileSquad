@@ -78,4 +78,8 @@ userSchema.statics.authenticateWithToken = async function (token) {
 
 const UserModel = model('User', userSchema);
 
+<<<<<<< HEAD
 module.exports = UserModel;
+=======
+module.exports = UserModel;
+>>>>>>> f582dafa7cd7553d69e2f1664f672cc01512b32b
