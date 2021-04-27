@@ -50,6 +50,8 @@
 1. POST `/api/v1/players/:id/addFriend` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to add a specific friend 
+
+
 ``{
     "active": true,
     "gamePlayed": 0,
