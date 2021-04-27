@@ -52,7 +52,8 @@
 * OUTPUT: allow the user to add a specific friend 
 
 
-``{
+```
+{
     "active": true,
     "gamePlayed": 0,
     "gameWin": 0,
@@ -68,7 +69,8 @@
     "password": "$2b$10$FJ9lEpGARlkFxbyWAyITwO.gGpvg.EaUoZ/HZQnCo4aOa1gpkxAM.",
     "email": "subhi@hotmail.com",
     "__v": 0
-}``
+}
+```
 
 2. POST `/api/v1/players/:id/removeFriend` >> bearer 
 * INPUT: username
