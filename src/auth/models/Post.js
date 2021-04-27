@@ -8,4 +8,6 @@ const postSchema = new Schema({
   content: { type: String, required: true },
 });
 
-module.exports = model('Post', postSchema);
+const PostModel = model('Post', postSchema);
+
+module.exports = PostModel;

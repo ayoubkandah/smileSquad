@@ -1,14 +1,29 @@
 'use strict';
+
+const UserModel = require('../auth/models/users.js');
+const ReportModel = require('../auth/models/Report.js');
+const PostModel = require('../auth/models/Post.js');
+
 class DataCollection {
   constructor(model, reportModel, postModel) {
     this.model = model;
     this.reportModel = reportModel;
     this.postModel = postModel;
   }
-  async addUser({ username, email, password, imgUrl }) {
-    let user = new this.model({ username, email, password, imgUrl });
-    let userData = await user.save();
-    return { ...userData._doc, token: userData.token };
+  async addUser({ username, email, password, imgUrl, role }) {
+    try {
+      let data = removeEmpty({ username, email, password, imgUrl, role });
+      let user = new this.model(data);
+      console.log(user);
+      let userData = await user.save();
+      return { ...userData._doc, token: userData.token };
+    } catch (error) {
+      console.log('__addUser__', error.message);
+    }
+  }
+  search(username) {
+    let users = this.model.find({ username });
+    return users;
   }
   async getUsers() {
     let users = await this.model.find({});
@@ -101,4 +116,4 @@ function removeEmpty(obj) {
   return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
 }
 
-module.exports = DataCollection;
+module.exports = new DataCollection(UserModel, ReportModel, PostModel);

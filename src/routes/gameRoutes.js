@@ -2,45 +2,70 @@
 
 const express = require('express');
 const router = express.Router();
+const users = require('../models/data-collection.js');
 const superagent = require('superagent');
 const Model = require('../auth/models/users.js');
 const bearerAuth = require('../auth/middleware/bearer.js');
 const permissions = require('../auth/middleware/acl.js');
 
-//////////////////////////////////////// admin  routes ////////////////////////////////////////////
-
-// router.get('/api/v1/players', bearerAuth, permissions('delete'), getAllPlayersHandler);
-// router.get('/api/v1/players/:id', bearerAuth, permissions('delete'), getOnePlayerHandler);
-// router.put('/api/v1/players/:id', bearerAuth, permissions('update'), updatePlayerHandler);
-// router.delete('/api/v1/players/:id', bearerAuth, permissions('delete'), deletePlayerHandler);
-// router.post('/api/v1/players/', bearerAuth, permissions('delete'), createPlayerHandler);
-// router.get('/adminProfile', bearerAuth, permissions('delete'), adminProfile);
-// router.get('/api/v1/report/players/', bearerAuth, permissions('delete'), getReportsHandler);
-
-//////////////////////////////////////// user routes ////////////////////////////////////////////
-
-router.post('/api/v1/players/:id/addFriend', bearerAuth, addFriendHandler);
-router.post(
-  '/api/v1/players/:id/removeFriend',
+router.get('/players', bearerAuth, permissions('delete'), getAllPlayersHandler);
+router.get(
+  '/players/:id',
   bearerAuth,
-  removeFriendHandler
+  permissions('delete'),
+  getOnePlayerHandler
 );
-router.get('/api/v1/players/:id/friends', bearerAuth, getFriendsHandler);
+router.put(
+  '/players/:id',
+  bearerAuth,
+  permissions('update'),
+  updatePlayerHandler
+);
+router.delete(
+  '/players/:id',
+  bearerAuth,
+  permissions('delete'),
+  deletePlayerHandler
+);
+router.post(
+  '/players/',
+  bearerAuth,
+  permissions('delete'),
+  createPlayerHandler
+);
+router.post('/report/player/:id', bearerAuth, addReportHandler);
+router.post('/players/addFriend', bearerAuth, addFriendHandler);
+router.post('/players/removeFriend', bearerAuth, removeFriendHandler);
+router.get('/players/friends/:id', bearerAuth, getFriendsHandler);
 router.get('/profile', bearerAuth, playerProfile);
-router.get('/api/v1/search/:username', bearerAuth, searchByHandler);
-router.post('/api/v1/report/player/:username', bearerAuth, addReportHandler);
-
-router.post('/api/v1/players/game', winLoseHandler);
-router.get('/api/v1/topPlayers', getTopPlayersHandlers);
-router.get('/api/v1/joke', getRandomJoke);
+router.get('/search/:username', bearerAuth, searchByHandler);
+router.post('/players/game', winLoseHandler);
+router.get('/topPlayers', getTopPlayersHandlers);
+router.get('/joke', getRandomJoke);
+router.get('/youtube', getRandomVideo);
 ///////////////////////////////////// admin  routes functions //////////////////////////////////////
+
+function getRandomVideo(req, res) {
+  const url = 'https://youtube.googleapis.com/youtube/v3/search';
+  const query = {
+    part: 'snippet',
+    q: `try not to laugh`,
+    key: process.env.YOUTUBE_KEY,
+  };
+  superagent
+    .get(url)
+    .query(query)
+    .then((data) => {
+      res.status(200).json(data.body.items[0].id.videoId);
+    })
+    .catch((error) => {
+      console.log('error from getting data from youtube API', error);
+    });
+}
 
 async function getAllPlayersHandler(req, res, next) {
   try {
-    const users = await Model.find({});
-    const list = users.filter((user) => {
-      if (user.role == 'user') return true;
-    });
+    const list = await users.getUsers();
     res.status(200).json(list);
   } catch (e) {
     next(e.message);
@@ -49,12 +74,8 @@ async function getAllPlayersHandler(req, res, next) {
 
 async function getOnePlayerHandler(req, res, next) {
   try {
-    const id = req.params.id;
-    const users = await Model.find({});
-    const list = users.filter((user) => {
-      if (user._id == id) return true;
-    });
-    res.status(200).json(list);
+    let getUser = await users.getUserById(req.params.id);
+    res.status(200).json(getUser);
   } catch (e) {
     next(e.message);
   }
@@ -62,10 +83,9 @@ async function getOnePlayerHandler(req, res, next) {
 
 async function updatePlayerHandler(req, res, next) {
   try {
-    const record = req.body;
     const id = req.params.id;
-    const users = await Model.findByIdAndUpdate(id, record, { new: true });
-    res.status(200).json(users);
+    let updatedUser = await users.userUpdate({ id, ...req.body });
+    res.status(200).json(updatedUser);
   } catch (e) {
     next(e.message);
   }
@@ -74,8 +94,8 @@ async function updatePlayerHandler(req, res, next) {
 async function deletePlayerHandler(req, res, next) {
   try {
     const id = req.params.id;
-    const users = await Model.findByIdAndDelete(id);
-    res.status(200).json(users);
+    const deletedUser = await users.userDelete(id);
+    res.status(200).json(deletedUser);
   } catch (e) {
     next(e.message);
   }
@@ -83,35 +103,8 @@ async function deletePlayerHandler(req, res, next) {
 
 async function createPlayerHandler(req, res, next) {
   try {
-    const object = req.body;
-    const users = await new Model(object).save();
-    res.status(200).json(users);
-  } catch (e) {
-    next(e.message);
-  }
-}
-
-async function adminProfile(req, res, next) {
-  try {
-    res.status(200).send(`Welcome to Smile Squad game ${req.user.username}`);
-  } catch (e) {
-    next(e.message);
-  }
-}
-
-async function getReportsHandler(req, res, next) {
-  try {
-    const users = await Model.find({});
-
-    let allReports = users.filter((element) => {
-      if (element.reports.length !== 0) {
-        return true;
-      }
-    });
-    let reports = allReports.map((element) => {
-      return { name: element.username, reports: element.reports };
-    });
-    res.status(200).json(reports);
+    const user = await users.addUser(req.body);
+    res.status(200).json(user);
   } catch (e) {
     next(e.message);
   }
@@ -121,26 +114,14 @@ async function getReportsHandler(req, res, next) {
 
 //for add and remove friends use in body :
 //      {
-//         "name":"friend name"
+//         "userId":"id"
+//          "friendId": "id"
 //       }
 async function addFriendHandler(req, res, next) {
   try {
-    const id = req.params.id;
-    const users = await Model.find({});
-    const object = req.body.name;
-    const list = users.filter((user) => {
-      if (user.username == object) {
-        return true;
-      }
-    });
-    let friendId = list[0]._id;
-    if (req.user.friendList.includes(friendId)) {
-      res.status(200).json(req.user);
-    } else {
-      req.user.friendList.push(friendId);
-      req.user.save();
-      res.status(200).json(req.user);
-    }
+    let friendId = { ...req.body };
+    let usersArray = await users.addUserFriend(friendId);
+    res.status(200).json(usersArray);
   } catch (e) {
     next(e.message);
   }
@@ -148,28 +129,8 @@ async function addFriendHandler(req, res, next) {
 
 async function removeFriendHandler(req, res, next) {
   try {
-    const id = req.params.id;
-    const users = await Model.find({});
-    const object = req.body.name;
-    const list = users.filter((user) => {
-      if (user.username == object) {
-        return true;
-      }
-    });
-    let friendId = list[0]._id;
-    if (req.user.friendList.length == 0) {
-      res.status(200).json(req.user);
-    } else {
-      let idx = 0;
-      req.user.friendList.forEach((element, index) => {
-        if (element.toString() === friendId.toString()) {
-          idx = index;
-          req.user.friendList.splice(idx, 1);
-        }
-      });
-      req.user.save();
-    }
-    res.status(200).json(req.user);
+    const friendsArray = await users.removeUserFriend({ ...req.body });
+    res.status(200).json(friendsArray);
   } catch (e) {
     next(e.message);
   }
@@ -178,17 +139,8 @@ async function removeFriendHandler(req, res, next) {
 async function getFriendsHandler(req, res, next) {
   try {
     const id = req.params.id;
-    const users = await Model.find({});
-    let friends = req.user.friendList.map((element) => {
-      let s = users.filter((user) => {
-        if (user._id.toString() == element.toString()) {
-          return true;
-        }
-      });
-      return s[0].username;
-    });
-    res.status(200).json(friends);
-    return friends;
+    const friendArray = await users.getFriends(id);
+    res.status(200).json(friendArray);
   } catch (e) {
     next(e.message);
   }
@@ -205,14 +157,8 @@ async function playerProfile(req, res, next) {
 async function searchByHandler(req, res, next) {
   try {
     const key = req.params.username;
-    const users = await Model.find({});
-    const list = users.filter((player) => {
-      if (key == req.user.username || key == req.user.email) {
-        return;
-      }
-      if (player.username == key || player.email == key) return true;
-    });
-    res.status(200).json(list);
+    const userlist = await users.search(key);
+    res.status(200).json(userlist);
   } catch (e) {
     next(e.message);
   }
@@ -220,25 +166,10 @@ async function searchByHandler(req, res, next) {
 
 async function addReportHandler(req, res, next) {
   try {
-    // the username here is for the person who will receive the report
-    // http://localhost:3000/api/v1/report/player/<username>
-    // for add report msg use in body:
-    //   {
-    //     "message":"this player ..................."
-    // }
-    const username = req.params.username;
-    const users = await Model.find({});
-    const object = req.body.message;
-    const list = users.filter((user) => {
-      if (user.username == username) {
-        return true;
-      }
-    });
-    console.log(list);
-    list[0].reports.push({ name: req.user.username, msg: object });
-    list[0].reportsNumbers++;
-    list[0].save();
-    res.status(200).json(list[0]);
+    const user = req.params.id;
+    const message = req.body.message;
+    const report = await users.addReprot({ user, message });
+    res.status(200).json(report);
   } catch (e) {
     next(e.message);
   }

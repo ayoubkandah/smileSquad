@@ -2,19 +2,15 @@
 
 const express = require('express');
 const router = express.Router();
+const user = require('../models/data-collection.js');
 const Model = require('./models/users.js');
 const basicAuth = require('./middleware/basic.js');
 //////////////////////////////////////// admin and user routes ////////////////////////////////////////////
 router.post('/signup', async (req, res, next) => {
   try {
-    let user = new Model(req.body);
-    console.log('__signup__', req.body);
-    const userRecord = await user.save();
-    const output = {
-      user: userRecord,
-      token: userRecord.token,
-    };
-    res.status(201).json(output);
+    let newUser = await user.addUser(req.body);
+    console.log('__user__', newUser);
+    res.status(201).json(newUser);
   } catch (e) {
     next(e.message);
   }
