@@ -58,9 +58,9 @@
     "gamePlayed": 0,
     "gameWin": 0,
     "winRatio": 0,
-    "friendList": [
+    **"friendList": [
         "6087273ba82a6d03a47e8db6"
-    ],
+    ],**
     "reportsNumbers": 0,
     "reports": [],
     "role": "user",
@@ -75,6 +75,7 @@
 2. POST `/api/v1/players/:id/removeFriend` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to remove a specific friend 
+```
 {
     "active": true,
     "gamePlayed": 0,
@@ -90,24 +91,25 @@
     "email": "subhi@hotmail.com",
     "__v": 1
 }
-
+```
 3. GET `/api/v1/players/:id/friends` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to get the names of his friends
+```
 [
     "subhi"
 ]
-
+```
 4. GET `/profile` >> bearer 
 * INPUT: -
 * OUTPUT: allow to show the user his account 
 
-Welcome to Smile Squad game <username>
+```Welcome to Smile Squad game <username>```
 
 5. GET `/api/v1/search/:username` >> bearer 
 * INPUT: email or username
 * OUTPUT: allow the user to search on another user by email or username
-
+```
 [
     {
         "active": true,
@@ -125,11 +127,11 @@ Welcome to Smile Squad game <username>
         "__v": 0
     }
 ]
-
+```
 6. POST `/api/v1/report/player/:username` >> bearer 
 * INPUT: message
 * OUTPUT: allow the user to report for another user
-
+```
 {
     "active": true,
     "gamePlayed": 0,
@@ -153,15 +155,17 @@ Welcome to Smile Squad game <username>
     "email": "subhi@hotmail.com",
     "__v": 6
 }
-
+```
 7. POST `/api/v1/players/game` 
-* INPUT: { "gamePlayers":[
+* INPUT: 
+```{ "gamePlayers":[
              "faten","raghad"
            ],
           "winner":"raghad"
          } 
+ ```
 * OUTPUT: count the points for the players
-
+```
 [
     {
         "active": true,
@@ -177,30 +181,15 @@ Welcome to Smile Squad game <username>
         "email": "raghad@gmail.com",
         "password": "$2b$10$dtHeBjBMqv25kz6jiHxaUusBiKOuRqrOz1aWOoqNGJquVlSWZVa1G",
         "__v": 2,
-        "posts": [
-            {
-                "_id": "6085fd70e95f5b038fbca0ee",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-                "username": "raghad",
-                "__v": 0
-            },
-            {
-                "_id": "608675929a9dab037fddc54b",
-                "title": "raghad",
-                "content": "hi gays ..............",
-                "username": "raghad",
-                "__v": 0
-            }
-        ]
+        "posts": []
     }
 ]
-
+```
 
 8. GET `/api/v1/topPlayers` 
 * INPUT: -
 * OUTPUT: return the top 5 players by win ratio
-
+```
 [
     {
         "active": true,
@@ -371,9 +360,10 @@ Welcome to Smile Squad game <username>
         ]
     }
 ]
-
+```
 9. GET `/api/v1/joke` 
 * INPUT: -
 * OUTPUT: Get random jokes from the jokes API
-
+```
 "Did you hear the one about the guy with the broken hearing aid? Neither did he."
+```
