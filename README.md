@@ -58,9 +58,9 @@
     "gamePlayed": 0,
     "gameWin": 0,
     "winRatio": 0,
-    **"friendList": [
+    #"friendList": [
         "6087273ba82a6d03a47e8db6"
-    ],**
+    ],
     "reportsNumbers": 0,
     "reports": [],
     "role": "user",
