@@ -47,7 +47,11 @@
 ## Routes Documentation 
 
 #### User's Routes:
-1. POST `/api/v1/players/:id/addFriend` >> bearer 
+1. POST `/signup` >> 
+2. POST `signin` >> basic 
+3.by google  `sign in by google` Open Auth
+
+4. POST `/api/v1/players/:id/addFriend` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to add a specific friend 
 
