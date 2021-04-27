@@ -51,7 +51,13 @@
 2. POST `signin` >> basic 
 3. by google  `sign in by google` Open Auth
 
-4. POST `/api/v1/players/:id/addFriend` >> bearer 
+4. GET `/profile` >> bearer 
+* INPUT: -
+* OUTPUT: allow to show the user his account 
+
+```Welcome to Smile Squad game <username>```
+
+5. POST `/api/v1/players/:id/addFriend` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to add a specific friend 
 
@@ -76,7 +82,7 @@
 }
 ```
 
-2. POST `/api/v1/players/:id/removeFriend` >> bearer 
+6. POST `/api/v1/players/:id/removeFriend` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to remove a specific friend 
 ```
@@ -96,7 +102,7 @@
     "__v": 1
 }
 ```
-3. GET `/api/v1/players/:id/friends` >> bearer 
+7. GET `/api/v1/players/:id/friends` >> bearer 
 * INPUT: username
 * OUTPUT: allow the user to get the names of his friends
 ```
@@ -104,13 +110,8 @@
     "subhi"
 ]
 ```
-4. GET `/profile` >> bearer 
-* INPUT: -
-* OUTPUT: allow to show the user his account 
 
-```Welcome to Smile Squad game <username>```
-
-5. GET `/api/v1/search/:username` >> bearer 
+8. GET `/api/v1/search/:username` >> bearer 
 * INPUT: email or username
 * OUTPUT: allow the user to search on another user by email or username
 ```
@@ -132,7 +133,7 @@
     }
 ]
 ```
-6. POST `/api/v1/report/player/:username` >> bearer 
+9. POST `/api/v1/report/player/:username` >> bearer 
 * INPUT: message
 * OUTPUT: allow the user to report for another user
 ```
@@ -160,7 +161,7 @@
     "__v": 6
 }
 ```
-7. POST `/api/v1/players/game` 
+10. POST `/api/v1/players/game` 
 * INPUT: 
 ```{ "gamePlayers":[
              "faten","raghad"
@@ -190,7 +191,7 @@
 ]
 ```
 
-8. GET `/api/v1/topPlayers` 
+11. GET `/api/v1/topPlayers` 
 * INPUT: -
 * OUTPUT: return the top 5 players by win ratio
 ```
@@ -278,23 +279,23 @@
     }
 ]
 ```
-9. POST `/api/v1/players/:id/addPost`
+12. POST `/api/v1/players/:id/addPost`
 * INPUT: 
 * OUTPUT:
 
-10. POST `/api/v1/players/:id/removePost`
+13. POST `/api/v1/players/:id/removePost`
  * INPUT: 
 * OUTPUT:
 
-11. PUT `/api/v1/players/:id/updatePost`
+14. PUT `/api/v1/players/:id/updatePost`
  * INPUT: 
 * OUTPUT:
 
-12. GET `/api/v1/players/:id/posts`
+15. GET `/api/v1/players/:id/posts`
  * INPUT: 
 * OUTPUT:
 
-13. GET `/api/v1/joke` 
+16. GET `/api/v1/joke` 
 * INPUT: -
 * OUTPUT: Get random jokes from the jokes API
 ```
