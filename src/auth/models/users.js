@@ -36,7 +36,7 @@ const userSchema = new Schema({
 });
 
 // virtuals for token and capabilities
-userSchema.virtual('token').get(() => {
+userSchema.virtual('token').get(function () {
   let tokenData = {
     username: this.username,
     email: this.email,
@@ -44,7 +44,7 @@ userSchema.virtual('token').get(() => {
   return jwt.sign(tokenData, process.env.SECRET);
 });
 
-userSchema.virtual('capabilities').get(() => {
+userSchema.virtual('capabilities').get(function () {
   let acl = {
     user: ['read'],
     editor: ['read', 'create', 'update'],
@@ -60,7 +60,7 @@ userSchema.pre('save', async function () {
 });
 
 // BASIC AUTH
-userSchema.static.authenticateBasic = async (email, password) => {
+userSchema.statics.authenticateBasic = async function (email, password) {
   const user = await this.findOne({ email });
   const valid = await bcrypt.compare(password, user.password);
   if (valid) return user;
@@ -68,11 +68,14 @@ userSchema.static.authenticateBasic = async (email, password) => {
 };
 
 // BEARER AUTH
-userSchema.statics.authenticateWithToken = async (token) => {
+userSchema.statics.authenticateWithToken = async function (token) {
   const parsedToken = jwt.verify(token, process.env.SECRET);
+  console.log('__token__', parsedToken.email);
   const user = this.findOne({ email: parsedToken.email });
   if (user) return user;
   throw new Error('User Not Found');
 };
 
-module.exports = model('User', userSchema);
+const UserModel = model('User', userSchema);
+
+module.exports = UserModel;
