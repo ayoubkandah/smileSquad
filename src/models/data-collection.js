@@ -14,7 +14,6 @@ class DataCollection {
     try {
       let data = removeEmpty({ username, email, password, imgUrl, role });
       let user = new this.model(data);
-      console.log(user);
       let userData = await user.save();
       return { ...userData._doc, token: userData.token };
     } catch (error) {

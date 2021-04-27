@@ -42,7 +42,7 @@ app.use(cookieParser());
 app.use('/api/v1', authRoutes);
 app.use('/api/v1', gameRoutes);
 app.use('/api/v1', videoRouter);
-app.use(postsRoutes);
+app.use('/api/v1', postsRoutes);
 app.use(videoRouter);
 app.use(googleRouter);
 // app.use(facebookRouter);
