@@ -62,7 +62,7 @@ navigator.mediaDevices
               ////////////////Player loser
               complete = true;
               socket.emit('winner', roomP);
-              window.location.href = './loser/id';
+              window.location.href = 'https://smilesquade-game.herokuapp.com/loser/id';
             } else {
               //////////////////// player lose 1 point
               $('#turn').text('Opponent turn');
