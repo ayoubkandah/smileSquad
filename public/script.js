@@ -4,7 +4,7 @@
 const options = {
   transports: ['websocket'],
 };
- 
+
 const socket = io('localhost:3000/', options); // emmit connection event to server
 let video2 = document.getElementById('video2');
 let video1 = document.getElementById('video1');
@@ -89,8 +89,8 @@ navigator.mediaDevices
       // console.log(video1.srcObject)
 
       connectToNewUser(userId, stream);
-        
-     
+
+
       console.log('---');
       setTimeout(function aa() {
         console.log('done 6sec');
@@ -137,8 +137,8 @@ navigator.mediaDevices
         $('#p2').text('Player 2');
         $('#start').show();
         if (player == 1) {
-      $('#video1').addClass("Active")
-      $('#video2').addClass("unActive")
+          $('#video1').addClass("Active")
+          $('#video2').addClass("unActive")
           trigger = false;
           GameStart();
         } else if (player == 2) {
@@ -186,7 +186,9 @@ navigator.mediaDevices
     function GameStart() {
       // $("start").hide()
       $('#point').text();
-
+      if ($('#roomInvitation')) {
+        $('#roomInvitation').remove()
+      }
       trigger = false;
       timeleft = 13;
       console.log('gamestart');
@@ -199,9 +201,9 @@ navigator.mediaDevices
         if (timeleft <= 0) {
           timeleft = 0;
           clearInterval(downloadTimer);
-          $('#turn').text('Opponent turn');
+          // $('#turn').text('Opponent turn');
           $('#video2').prop('muted', false);
-          $('#hint').text('Dont laughing');
+          // $('#hint').text('Try not to laugh');
           $('#video2').removeClass()
           $('#video1').removeClass()
           $('#video2').addClass("Active")
@@ -228,7 +230,7 @@ myPeer.on('open', (id) => {
   userID = id;
   console.log(RoomPrivate)
 
-  socket.emit('join-room', ROOM_ID, id,RoomPrivate);
+  socket.emit('join-room', ROOM_ID, id, RoomPrivate);
 });
 
 function connectToNewUser(userId, stream) {
