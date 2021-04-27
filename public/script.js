@@ -55,7 +55,7 @@ navigator.mediaDevices
           .withFaceLandmarks()
           .withFaceExpressions();
         if (detections.length > 0) {
-          if (detections[0].expressions.happy > 0.75 && trigger) {
+          if (detections[0].expressions.happy > 0.62 && trigger) {
             oppPoints++;
 
             if (oppPoints >= 3) {
@@ -221,7 +221,7 @@ navigator.mediaDevices
     socket.on('user-disconnected', (userId) => {
       if (peers[userId]) peers[userId].close();
       if (!complete) {
-        window.location.href = 'http://localhost:3000/playerDisc/id';
+        window.location.href = 'https://smilesquade-game.herokuapp.com/playerDisc/id';
       }
     });
   });
