@@ -281,23 +281,90 @@
 ```
 12. POST `/api/v1/players/:id/addPost`
 * INPUT: 
-* OUTPUT:
+```
+{
+   "title":"title",
+   "content":"content...."
+   }
+   ```
+* OUTPUT:allow the user to add a specific Post
+
+```
+posts:{
+[
+ {
+    _id:53453453454553456dcsdcsdcdsv,
+    "title":"title",
+    "content":"content....",
+    "username":"username",
+    __v: 0
+   }
+ ]
+}
+```
 
 13. POST `/api/v1/players/:id/removePost`
  * INPUT: 
-* OUTPUT:
+* OUTPUT:allow the user to remove a specific post
+```
+posts:[]
+```
 
 14. PUT `/api/v1/players/:id/updatePost`
  * INPUT: 
-* OUTPUT:
-
+ ```
+ {
+    _id:53453453454553456dcsdcsdcdsv,
+    "title":"title2",
+    "content":"content2....",
+    "username":"username2",
+    __v: 0
+   }
+ 
+```
+* OUTPUT:allow the user to update a specific post
+```
+posts:{
+[
+ {
+    _id:53453453454553456dcsdcsdcdsv,
+    "title":"title2",
+    "content":"content2....",
+    "username":"username2",
+    "__v": 0
+   }
+ ]
+}
+```
 15. GET `/api/v1/players/:id/posts`
  * INPUT: 
-* OUTPUT:
-
+* OUTPUT:allow the user to get all posts
+```
+posts:[
+{
+ _id:53453453454553456dcsdcsdcdsv,
+    "title": "title",
+    "content": "content.....",
+    "username": "username1",
+    "__v": 0
+},
+{
+ _id:53453453454553456dcsdcsdcdsv,
+    "title": "title3",
+    "content": "content3",
+    "username": "username2",
+    "__v": 0
+}
+```
 16. GET `/api/v1/joke` 
 * INPUT: -
 * OUTPUT: Get random jokes from the jokes API
 ```
 "Did you hear the one about the guy with the broken hearing aid? Neither did he."
+```
+17. GET `/api/v1/youtubeVideo`
+* INPUT: -
+* OUTPUT: Get random funny video from the youtube API
+```
+https://www.youtube.com/watch?v=zAe5n2F3IQI
 ```
