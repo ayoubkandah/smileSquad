@@ -58,7 +58,7 @@
     "gamePlayed": 0,
     "gameWin": 0,
     "winRatio": 0,
-    #"friendList": [
+      "friendList": [
         "6087273ba82a6d03a47e8db6"
     ],
     "reportsNumbers": 0,
@@ -193,9 +193,9 @@
 [
     {
         "active": true,
-        "gamePlayed": 0,
-        "gameWin": 0,
-        "winRatio": 0.21,
+        "gamePlayed": 10,
+        "gameWin": 8,
+        "winRatio": 0.80,
         "friendList": [],
         "reportsNumbers": 0,
         "reports": [],
@@ -209,9 +209,9 @@
     },
     {
         "active": true,
-        "gamePlayed": 0,
-        "gameWin": 0,
-        "winRatio": 0,
+        "gamePlayed": 10,
+        "gameWin": 5,
+        "winRatio": 0.50,
         "friendList": [],
         "reportsNumbers": 0,
         "reports": [],
@@ -221,49 +221,13 @@
         "email": "faten1@gmail.com",
         "password": "$2b$10$QfYIMI567umvQ6ndAlhj8.I1mrnJvL.fWGaAUj2H4cNPMC9jCUWuC",
         "__v": 33,
-        "posts": [
-            {
-                "_id": "6085d9083b04210eaeadfef5",
-                "title": "hello from ",
-                "content": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                "username": "faten1",
-                "__v": 0
-            },
-            {
-                "_id": "6085d90b3b04210eaeadfef6",
-                "title": "hello from ",
-                "content": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                "username": "faten1",
-                "__v": 0
-            },
-            {
-                "_id": "6085d90d3b04210eaeadfef7",
-                "title": "hello from ",
-                "content": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                "username": "faten1",
-                "__v": 0
-            },
-            {
-                "_id": "6085d9143b04210eaeadfef8",
-                "title": "hello from ",
-                "content": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                "username": "faten1",
-                "__v": 0
-            },
-            {
-                "_id": "6085d9848e92780ed59ed897",
-                "title": "hello from ",
-                "content": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-                "username": "faten1",
-                "__v": 0
-            }
-        ]
+        "posts": []
     },
     {
         "active": true,
-        "gamePlayed": 0,
-        "gameWin": 0,
-        "winRatio": 0,
+        "gamePlayed": 10,
+        "gameWin": 2,
+        "winRatio": 0.20,
         "friendList": [
             "60853dee6d5ee304d43a22bb"
         ],
@@ -278,9 +242,9 @@
     },
     {
         "active": true,
-        "gamePlayed": 0,
-        "gameWin": 0,
-        "winRatio": 0,
+        "gamePlayed": 10,
+        "gameWin": 1,
+        "winRatio": 0.1,
         "friendList": [],
         "reportsNumbers": 0,
         "reports": [],
@@ -290,22 +254,7 @@
         "email": "raghad@gmail.com",
         "password": "$2b$10$dtHeBjBMqv25kz6jiHxaUusBiKOuRqrOz1aWOoqNGJquVlSWZVa1G",
         "__v": 2,
-        "posts": [
-            {
-                "_id": "6085fd70e95f5b038fbca0ee",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-                "username": "raghad",
-                "__v": 0
-            },
-            {
-                "_id": "608675929a9dab037fddc54b",
-                "title": "raghad",
-                "content": "hi gays ..............",
-                "username": "raghad",
-                "__v": 0
-            }
-        ]
+        "posts": []
     },
     {
         "active": true,
@@ -321,43 +270,7 @@
         "email": "amal@gmail.com",
         "password": "$2b$10$n.zT6.8zcqY2T.GCrbMZi.tWHryNsEbDp/GBoJ8LD5G4jrj0PBvqa",
         "__v": 5,
-        "posts": [
-            {
-                "_id": "6085ff2ae95f5b038fbca0ef",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "fffffffffffff",
-                "username": "amal",
-                "__v": 0
-            },
-            {
-                "_id": "60860416fc3ffd07019ee577",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "fffffffffdddddddvvvvvvvvvvvddddddddddd",
-                "username": "amal",
-                "__v": 0
-            },
-            {
-                "_id": "60860473ab5f9007d645b881",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "fffffffffdddddddvvvvvvvvvvvddddddddddd",
-                "username": "amal",
-                "__v": 0
-            },
-            {
-                "_id": "6086047aab5f9007d645b882",
-                "title": "fatennnnnnnnnnnnnnnnnn",
-                "content": "fffffffffdddddddvvvvvvvvvvvddddddddddd",
-                "username": "amal",
-                "__v": 0
-            },
-            {
-                "_id": "6086048bab5f9007d645b883",
-                "title": "fatennnnnnnnnnn4444444444444444444nnnnnnn",
-                "content": "fffffffffdddddddvvvvvvvvvvvddddddddddd",
-                "username": "amal",
-                "__v": 0
-            }
-        ]
+        "posts": []
     }
 ]
 ```
