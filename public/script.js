@@ -55,7 +55,7 @@ navigator.mediaDevices
           .withFaceLandmarks()
           .withFaceExpressions();
         if (detections.length > 0) {
-          if (detections[0].expressions.happy > 0.62 && trigger) {
+          if (detections[0].expressions.happy > 0.75 && trigger) {
             oppPoints++;
 
             if (oppPoints >= 3) {
