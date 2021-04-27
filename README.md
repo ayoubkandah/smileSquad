@@ -274,7 +274,23 @@
     }
 ]
 ```
-9. GET `/api/v1/joke` 
+9. POST `/api/v1/players/:id/addPost`
+* INPUT: 
+* OUTPUT:
+
+10. POST `/api/v1/players/:id/removePost`
+ * INPUT: 
+* OUTPUT:
+
+11. PUT `/api/v1/players/:id/updatePost`
+ * INPUT: 
+* OUTPUT:
+
+12. GET `/api/v1/players/:id/posts`
+ * INPUT: 
+* OUTPUT:
+
+13. GET `/api/v1/joke` 
 * INPUT: -
 * OUTPUT: Get random jokes from the jokes API
 ```
