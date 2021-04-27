@@ -225,6 +225,7 @@ navigator.mediaDevices
       }
     });
   });
+  
 
 myPeer.on('open', (id) => {
   userID = id;
