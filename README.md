@@ -279,7 +279,7 @@
     }
 ]
 ```
-12. POST `/api/v1/players/:id/addPost`
+12. POST `/api/v1/players/:id/addPost`>> bearer 
 * INPUT: 
 ```
 {
@@ -303,14 +303,14 @@ posts:{
 }
 ```
 
-13. POST `/api/v1/players/:id/removePost`
+13. POST `/api/v1/players/:id/removePost`>> bearer 
  * INPUT: 
 * OUTPUT:allow the user to remove a specific post
 ```
 posts:[]
 ```
 
-14. PUT `/api/v1/players/:id/updatePost`
+14. PUT `/api/v1/players/:id/updatePost`>> bearer 
  * INPUT: 
  ```
  {
@@ -336,7 +336,7 @@ posts:{
  ]
 }
 ```
-15. GET `/api/v1/players/:id/posts`
+15. GET `/api/v1/players/:id/posts`>> bearer 
  * INPUT: 
 * OUTPUT:allow the user to get all posts
 ```
