@@ -45,7 +45,7 @@
 
 
 ## Routes Documentation 
-
+### REST API
 #### User's Routes:
 1. POST `/signup` >> 
 2. POST `signin` >> basic 
@@ -103,7 +103,7 @@
 }
 ```
 7. GET `/api/v1/players/:id/friends` >> bearer 
-* INPUT: username
+* INPUT:
 * OUTPUT: allow the user to get the names of his friends
 ```
 [
@@ -368,3 +368,7 @@ posts:[
 ```
 https://www.youtube.com/watch?v=zAe5n2F3IQI
 ```
+### GRAGHQL API
+![GRPGH](https://miro.medium.com/max/700/1*K0czTfHWTtNNBhvaVdyXfw.gif)
+![GRPGH](https://graphql-engine-cdn.hasura.io/learn-hasura/assets/graphql-react/graphql-api.gif)
+
