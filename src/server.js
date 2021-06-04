@@ -17,11 +17,13 @@ const googleRouter = require('./auth/middleware/google.js');
 const videoRouter = require('./routes/videoGame.js');
 const { v4: uuidv4 } = require('uuid');
 const app = express();
-const server = require('http').Server(app);
-const io = socket(server, {
-cors: {
-  origin: "http://localhost:3000",
-},});
+const server = require('http').createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 // Global Variables
 let client = 0;
