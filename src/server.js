@@ -62,85 +62,175 @@ app.get('/pvp/:id', (req, res) => {
   res.render('pvp.ejs', { private: true, Room: req.params.id, roomId: 'null' });
 });
 // socket io
-
+let cl=0
 io.on('connection', (socket) => {
-  socket.on('join-room', (roomId, userId, RoomPrivate) => {
-    console.log(uuidv4());
 
-    if (RoomPrivate) {
-      if (roomsP.includes(RoomPrivate) == false) {
-        console.log('push not include');
-        roomsP.push(RoomPrivate);
-        room = RoomPrivate;
-        console.log(room);
-        socket.join(room);
-      } else {
-        console.log('include Private');
-        room = RoomPrivate;
-        console.log('in before conn');
-        socket.Room = room;
-        console.log(room);
-        socket.join(room);
-        socket.to(room).emit('user-connected', userId, room);
-      }
-    } else {
-      client++;
-      if (client % 2 !== 0) {
-        console.log('not Private');
-        index = client - index - 1;
-        rooms.push(index);
-        room = rooms[index];
 
-        socket.Room = room;
-        console.log(room, 'player');
-        socket.join(room);
-      } else if (client % 2 == 0) {
-        room = rooms[index];
-        socket.join(room);
-        console.log(rooms);
-        index++;
-        socket.to(room).emit('user-connected', userId, room);
-      }
-    }
 
-    socket.on('disconnect', () => {
-      if (roomsP.includes(socket.Room)) {
-        let indexArr = roomsP.indexOf(socket.Room);
-        console.log(indexArr);
-        roomsP[indexArr] = null;
-        socket.to(room).emit('user-disconnected', userId);
-      } else {
-        if (client > 0) {
-          client--;
-        }
-        if (client % 2 == 0 && index > 0) {
-          index--;
-          rooms.pop();
-        }
-        socket.to(room).emit('user-disconnected', userId);
-      }
+
+//////////////////////////  simple peer React
+client++;
+
+console.log(client)
+if (client % 2 !== 0) {
+  console.log('not Private');
+  index = client - index - 1;
+
+  rooms.push(index);
+  room = rooms[index];
+  socket.Room=room
+console.log(room,"eeee")
+  socket.Room = room;
+  console.log(socket.Room,"----");
+
+  // console.log(room, 'player');
+  socket.join(room);
+  socket.emit("me", socket.id,room)
+}else if (client % 2 == 0) {
+  room = rooms[index];
+  socket.join(room);
+  socket.Room=room
+  console.log(socket.Room,"|||");
+  index++;
+  socket.to(room).emit("autoCall",room,socket.id)
+
+}
+
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	})
+
+	socket.on("callUser", (data) => {
+		socket.to(room).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
+	})
+
+	socket.on("answerCall", (data) => {
+		socket.nsp.to(room).emit("callAccepted", data.signal)
+	})
+
+socket.on("startG",()=>{
+
+  // console.log(socket.Room,"dddddddee")
+  socket.nsp.to(socket.Room).emit("gameS")
+})
+
+ socket.on('p2Turn', (yourPoints, oppPoints) => {
+   console.log(socket.Room)
+    socket.to(socket.Room).emit('yourTurn', yourPoints, oppPoints);
+  });
+  socket.on('p2TurnL', (yourPoints, oppPoints) => {
+    console.log(yourPoints,oppPoints,"pointss")
+      socket.to(socket.Room).emit('getPoint', yourPoints, oppPoints);
     });
+      socket.on('winner', (roomG) => {
+    socket.to(socket.Room).emit('youWin');
   });
+  
 
-  socket.on('startV', (roomId, userId) => {
-    socket.emit('user-connected2', userId);
-  });
-  socket.on('startG', (roomG) => {
-    console.log('startG', roomG);
-    socket.nsp.to(roomG).emit('startGaming', roomG);
-  });
+  socket.on('disconnect', () => {
+        if (roomsP.includes(socket.Room)) {
+          let indexArr = roomsP.indexOf(socket.Room);
+          console.log(indexArr);
+          roomsP[indexArr] = null;
+          // socket.to(room).emit('user-disconnected');
+        } else {
+          if (client > 0) {
+            client--;
+          }
+          if (client % 2 == 0 && index > 0) {
+            index--;
+            rooms.pop();
+          }
+          socket.to(socket.Room).emit('user-disconnected');
+        }
+      });
 
-  socket.on('p2Turn', (roomG, yourPoints, oppPoints) => {
-    socket.to(roomG).emit('yourTurn', yourPoints, oppPoints);
-  });
 
-  socket.on('p2TurnL', (roomP, yourPoints, oppPoints) => {
-    socket.to(roomP).emit('getPoint', yourPoints, oppPoints);
-  });
 
-  socket.on('winner', (roomG) => {
-    socket.to(roomG).emit('youWin');
-  });
+
+
+////////////////////// end simple peer
+
+
+
+  // socket.on('join-room', (roomId, userId, RoomPrivate) => {
+  //   console.log(uuidv4());
+
+  //   if (RoomPrivate) {
+  //     if (roomsP.includes(RoomPrivate) == false) {
+  //       console.log('push not include');
+  //       roomsP.push(RoomPrivate);
+  //       room = RoomPrivate;
+  //       console.log(room);
+  //       socket.join(room);
+  //     } else {
+  //       console.log('include Private');
+  //       room = RoomPrivate;
+  //       console.log('in before conn');
+  //       socket.Room = room;
+  //       console.log(room);
+  //       socket.join(room);
+  //       socket.to(room).emit('user-connected', userId, room);
+  //     }
+  //   } else {
+  //     client++;
+  //     if (client % 2 !== 0) {
+  //       console.log('not Private');
+  //       index = client - index - 1;
+  //       rooms.push(index);
+  //       room = rooms[index];
+
+  //       socket.Room = room;
+  //       console.log(room, 'player');
+  //       socket.join(room);
+  //     } else if (client % 2 == 0) {
+  //       room = rooms[index];
+  //       socket.join(room);
+  //       console.log(rooms);
+  //       index++;
+  //       socket.to(room).emit('user-connected', userId, room);
+  //     }
+  //   }
+
+  //   socket.on('disconnect', () => {
+  //     if (roomsP.includes(socket.Room)) {
+  //       let indexArr = roomsP.indexOf(socket.Room);
+  //       console.log(indexArr);
+  //       roomsP[indexArr] = null;
+  //       socket.to(room).emit('user-disconnected', userId);
+  //     } else {
+  //       if (client > 0) {
+  //         client--;
+  //       }
+  //       if (client % 2 == 0 && index > 0) {
+  //         index--;
+  //         rooms.pop();
+  //       }
+  //       socket.to(room).emit('user-disconnected', userId);
+  //     }
+  //   });
+  // });
+
+  // socket.on('startV', (roomId, userId) => {
+  //   socket.emit('user-connected2', userId);
+  // });
+  // socket.on('startG', (roomG) => {
+  //   console.log('startG', roomG);
+  //   socket.nsp.to(roomG).emit('startGaming', roomG);
+  // });
+
+  // socket.on('p2Turn', (roomG, yourPoints, oppPoints) => {
+  //   socket.to(roomG).emit('yourTurn', yourPoints, oppPoints);
+  // });
+
+  // socket.on('p2TurnL', (roomP, yourPoints, oppPoints) => {
+  //   socket.to(roomP).emit('getPoint', yourPoints, oppPoints);
+  // });
+
+  // socket.on('winner', (roomG) => {
+  //   socket.to(roomG).emit('youWin');
+  // });
 });
 
 // Errors Middlewares
