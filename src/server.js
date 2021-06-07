@@ -73,13 +73,14 @@ client++;
 
 console.log(client)
 if (client % 2 !== 0) {
-  console.log('not Private');
-  index = client - index - 1;
-
+  index ++;
+  
   rooms.push(index);
-  room = rooms[index];
+  console.log('not 2',index);
+  room = rooms[rooms.length-1];
   socket.Room=room
 console.log(room,"eeee")
+console.log(rooms,"rooms")
   socket.Room = room;
   console.log(socket.Room,"----");
 
@@ -87,9 +88,10 @@ console.log(room,"eeee")
   socket.join(room);
   socket.emit("me", socket.id,room)
 }else if (client % 2 == 0) {
-  room = rooms[index];
-  socket.join(room);
+  room = rooms[rooms.length-1];
+  console.log('eq 2',index ,"Room",room);
   socket.Room=room
+  socket.join(room);
   console.log(socket.Room,"|||");
   index++;
   socket.to(room).emit("autoCall",room,socket.id)
@@ -116,11 +118,9 @@ socket.on("startG",()=>{
 })
 
  socket.on('p2Turn', (yourPoints, oppPoints) => {
-   console.log(socket.Room)
     socket.to(socket.Room).emit('yourTurn', yourPoints, oppPoints);
   });
   socket.on('p2TurnL', (yourPoints, oppPoints) => {
-    console.log(yourPoints,oppPoints,"pointss")
       socket.to(socket.Room).emit('getPoint', yourPoints, oppPoints);
     });
       socket.on('winner', (roomG) => {
@@ -139,8 +139,7 @@ socket.on("startG",()=>{
             client--;
           }
           if (client % 2 == 0 && index > 0) {
-            index--;
-            rooms.pop();
+       
           }
           socket.to(socket.Room).emit('user-disconnected');
         }
