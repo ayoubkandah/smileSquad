@@ -10,8 +10,8 @@ const gameRoutes = require('./routes/gameRoutes.js');
 const postsRoutes = require('./routes/postsRouts.js');
 const notFoundHandler = require('./error-handlers/404');
 const errorHandler = require('./error-handlers/500');
-const adminBro = require('./admin/adminbro/adminBro.js');
-const router = require('./admin/router/router.js'); // admin panel router
+// const adminBro = require('./admin/adminbro/adminBro.js');
+// const router = require('./admin/router/router.js'); // admin panel router
 const googleRouter = require('./auth/middleware/google.js');
 // const facebookRouter = require('./auth/middleware/facebook.js');
 const videoRouter = require('./routes/videoGame.js');
@@ -20,7 +20,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://smile-squad.netlify.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"]
   }
 });
@@ -40,7 +40,7 @@ app.use(morgan('dev'));
 
 // Middlewares Note: Please don't change the order of them
 app.use(logger);
-app.use(adminBro.options.rootPath, router);
+// app.use(adminBro.options.rootPath, router);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -86,7 +86,7 @@ console.log(rooms,"rooms")
 
   // console.log(room, 'player');
   socket.join(room);
-  socket.emit("me", socket.id,room)
+  socket.emit("me", socket.id,room,client)
 }else if (client % 2 == 0) {
   room = rooms[rooms.length-1];
   console.log('eq 2',index ,"Room",room);
@@ -94,11 +94,15 @@ console.log(rooms,"rooms")
   socket.join(room);
   console.log(socket.Room,"|||");
   index++;
-  socket.to(room).emit("autoCall",room,socket.id,client)
+  socket.emit("autoCall",room,socket.id)
 
 }
 
+socket.on("automatic",()=>{
+  socket.to(socket.Room).emit("autoCall",room,socket.id)
 
+
+})
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
 	})
