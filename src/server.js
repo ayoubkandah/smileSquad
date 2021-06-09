@@ -20,12 +20,12 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://ak-smilesquad.netlify.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"]
   }
 });
 
-// Global Variables
+// Global Variables https://ak-smilesquad.netlify.app
 let client = 0;
 let rooms = [];
 let index = 0;
