@@ -94,7 +94,7 @@ console.log(rooms,"rooms")
   socket.join(room);
   console.log(socket.Room,"|||");
   index++;
-  socket.to(room).emit("autoCall",room,socket.id)
+  socket.to(room).emit("autoCall",room,socket.id,client)
 
 }
 
